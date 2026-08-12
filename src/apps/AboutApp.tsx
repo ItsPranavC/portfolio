@@ -27,7 +27,7 @@ export function AboutApp() {
             View Resume
           </GlassButton>
           <GlassButton onClick={() => openApp("projects")}>Projects</GlassButton>
-          <GlassButton onClick={() => openApp("experience")}>Skills</GlassButton>
+          <GlassButton onClick={() => openApp("experience")}>Experience</GlassButton>
           <GlassButton onClick={() => openApp("contact")}>Contact</GlassButton>
         </div>
       </div>

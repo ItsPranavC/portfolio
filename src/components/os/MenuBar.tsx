@@ -112,7 +112,7 @@ export function MenuBar({ hidden }: { hidden?: boolean }) {
 
   return (
     <div
-      className="absolute inset-x-0 top-0 z-[5000] flex h-[30px] items-center px-2 text-[13px]"
+      className="absolute inset-x-0 top-0 z-[5000] flex h-[30px] items-center px-2 text-[13px] leading-none"
       style={{
         color: "rgba(255,255,255,0.95)",
         textShadow: "0 1px 4px rgba(0,0,0,0.35)",
@@ -124,13 +124,13 @@ export function MenuBar({ hidden }: { hidden?: boolean }) {
       }}
     >
       {/* Left: menus */}
-      <div className="flex items-center">
+      <div className="flex h-full items-center">
         {menus.map((m) => (
-          <div key={m.id} className="relative">
+          <div key={m.id} className="relative flex h-full items-center">
             <button
-              className="rounded-[5px] px-2.5 py-[3px] transition-colors"
+              className="flex h-[22px] items-center rounded-[5px] px-2.5 transition-colors"
               style={{
-                fontWeight: m.bold ? 700 : m.id === "apple" ? 500 : 400,
+                fontWeight: m.bold ? 600 : m.id === "apple" ? 500 : 400,
                 background: openMenu === m.id ? "rgba(255,255,255,0.22)" : "transparent",
               }}
               onClick={() => setOpenMenu(openMenu === m.id ? null : m.id)}
@@ -148,7 +148,7 @@ export function MenuBar({ hidden }: { hidden?: boolean }) {
       <div className="flex-1" />
 
       {/* Right: status items */}
-      <div className="flex items-center gap-1">
+      <div className="flex h-full items-center gap-1">
         <StatusButton label="Spotlight" onClick={() => setSpotlight(true)}>
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <circle cx="7" cy="7" r="4.6" />
@@ -245,7 +245,7 @@ function Dropdown({ items, onClose }: { items: MenuItem[]; onClose: () => void }
 
 function AppleLogo() {
   return (
-    <svg width="14" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ marginTop: -2 }}>
+    <svg width="13" height="15" viewBox="0 0 24 24" fill="currentColor" className="block">
       <path d="M17.05 12.54c-.03-2.71 2.21-4.01 2.31-4.07-1.26-1.84-3.22-2.09-3.92-2.12-1.66-.17-3.25.98-4.09.98-.85 0-2.15-.96-3.54-.93-1.82.03-3.5 1.06-4.44 2.69-1.9 3.29-.49 8.14 1.36 10.81.9 1.31 1.98 2.77 3.39 2.72 1.36-.05 1.88-.88 3.52-.88 1.65 0 2.11.88 3.55.85 1.47-.02 2.4-1.33 3.29-2.64 1.04-1.51 1.46-2.98 1.49-3.05-.03-.02-2.86-1.1-2.92-4.36zM14.36 4.6c.75-.91 1.25-2.17 1.11-3.43-1.08.04-2.38.72-3.16 1.63-.69.8-1.3 2.09-1.14 3.32 1.2.09 2.44-.61 3.19-1.52z" />
     </svg>
   );
