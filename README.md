@@ -186,6 +186,7 @@ cp .env.example .env.local
 | `RESEND_API_KEY` | Contact form email ([resend.com](https://resend.com)) | Form returns a friendly error |
 | `CONTACT_TO` | Where contact mail is delivered | Falls back to a default address |
 | `ELEVENLABS_API_KEY` | Text-to-speech proxy at `/api/tts` | Route returns an error |
+| `OPENAI_API_KEY` | Bevo chat proxy at `/api/bevo/chat` | Bevo's chat replies with a friendly error |
 | `NEXT_PUBLIC_CAL_URL` | Calendar app booking embed | Falls back to `localhost:3002` |
 | `NEXT_PUBLIC_CAL_USERNAME` | Which calendar to show | Falls back to a default |
 
