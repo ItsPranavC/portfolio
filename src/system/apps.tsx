@@ -16,6 +16,9 @@ const KubrickApp = makeWebApp({
   name: "Kubrick",
   url: "https://kubrick.to",
   logo: "/icons/kubrick.svg",
+  // kubrick.to serves `frame-ancestors 'none'` + X-Frame-Options: DENY, so the
+  // browser blocks the embed outright — show the splash instead of a blank frame
+  frameBlocked: true,
   splashBg: "#000",
   splashColor: "#fff",
 });
