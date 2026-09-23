@@ -4,6 +4,8 @@ import { useOS, type WallpaperId } from "@/system/store";
 
 interface WallpaperSpec {
   name: string;
+  /** shot for a phone screen — kept out of the desktop pickers */
+  phoneOnly?: boolean;
   /** CSS gradient: the full wallpaper for gradient specs, and the
    *  instant-paint fallback behind `image` while it loads. */
   base: string;
@@ -31,6 +33,12 @@ export const WALLPAPERS: Record<WallpaperId, WallpaperSpec> = {
       { color: "rgba(160, 80, 255, 0.35)", size: "46vw", x: "16%", y: "26%", anim: "wallpaper-blob-c" },
     ],
   },
+  liquid: {
+    name: "Liquid Glass",
+    phoneOnly: true,
+    base: "linear-gradient(150deg, #dfeaf0 0%, #8fe0c2 45%, #3f6fd8 100%)",
+    image: "/wallpapers/ios-liquid.jpg",
+  },
   graphite: {
     name: "Graphite",
     base: "linear-gradient(165deg, #0c0c10 0%, #1c1c24 45%, #2e2e3a 75%, #4a4a5c 100%)",
@@ -41,6 +49,13 @@ export const WALLPAPERS: Record<WallpaperId, WallpaperSpec> = {
     ],
   },
 };
+
+/** Wallpapers offered in a picker; phone-shaped ones only on a phone. */
+export function wallpaperChoices(phone: boolean): WallpaperId[] {
+  return (Object.keys(WALLPAPERS) as WallpaperId[]).filter(
+    (id) => phone || !WALLPAPERS[id].phoneOnly
+  );
+}
 
 /** CSS background shorthand for previews (Control Center, Settings). */
 export function wallpaperPreview(id: WallpaperId): string {

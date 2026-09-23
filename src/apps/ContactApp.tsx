@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { profile } from "@/data/resume";
-import { useOS } from "@/system/store";
+import { launchApp } from "@/system/os-bridge";
 import { GlassButton } from "./AboutApp";
 
 type SendState = "idle" | "sending" | "sent" | "error";
@@ -155,7 +155,7 @@ export function ContactApp() {
           <button
             className="font-medium hover:underline"
             style={{ color: "var(--accent)" }}
-            onClick={() => useOS.getState().openApp("calendar")}
+            onClick={() => launchApp("calendar")}
           >
             Schedule a call ↗
           </button>

@@ -45,6 +45,16 @@ Instead of scrolling a page, visitors use a desktop. Every part of the portfolio
 
 **Keyboard shortcuts:** `⌘K` Spotlight · `⌘W` close window · `⌘M` minimize · `⌘T` new terminal · `Esc` dismiss
 
+**On a phone it's a different OS.** Phones don't get a shrunken desktop — they
+get an iOS-style shell: status bar, home-screen icon grid, liquid-glass dock,
+and apps that zoom out of their icon into full screen with a home indicator to
+leave them. About, Projects, Experience, Contact, and Resume have iOS-native
+layouts; every other app is reused as-is, full-screen. To leave an app, swipe
+up on the home indicator (it shrinks the app as you pull), tap it, or press
+`Esc` — the first few times, it says so. Preview the whole thing from a desktop
+browser with <http://localhost:3000/?ios=1> (and `?ios=0` forces the desktop on
+a phone).
+
 ---
 
 ## Quick start
@@ -223,22 +233,38 @@ npm start
 ```
 src/
 ├── app/
-│   ├── page.tsx           # renders <MacOS />
+│   ├── page.tsx           # renders <Device /> — picks the shell
 │   ├── layout.tsx         # fonts, metadata
 │   ├── globals.css        # liquid-glass utilities, animations
 │   └── api/               # contact (Resend) + tts (ElevenLabs) routes
 ├── system/
 │   ├── store.ts           # Zustand store — the whole OS state
 │   ├── apps.tsx           # app registry
-│   └── icons.tsx          # app icon rendering
-├── components/os/         # the shell: MacOS, Window, Dock, MenuBar,
-│                          # Spotlight, ControlCenter, Wallpaper, BootScreen
-└── apps/                  # one file per app
+│   ├── icons.tsx          # app icon rendering
+│   ├── ios-store.ts       # iOS shell state (which app is open)
+│   ├── ios-apps.tsx       # how each app presents itself on iOS
+│   └── os-bridge.ts       # launchApp() — opens an app in whichever shell is live
+├── components/
+│   ├── Device.tsx         # phone detection: <IPhone /> or <MacOS />
+│   ├── os/                # the desktop shell: MacOS, Window, Dock, MenuBar,
+│   │                      # Spotlight, ControlCenter, Wallpaper, BootScreen
+│   └── ios/               # the phone shell: IPhone, StatusBar, HomeScreen,
+│                          # IOSDock, AppHost
+└── apps/                  # one file per app (ios/ holds the iOS restyles)
 ```
 
 **The state model.** A single Zustand store (`src/system/store.ts`) holds every open window as `{ x, y, w, h, z, minimized, maximized, fullscreen }`, plus the focus order, dark mode, wallpaper, and which overlays are open. Window chrome, the dock, and the menu bar all read from it, so any component can open, focus, or close an app with one call — `useOS.getState().openApp("projects")`.
 
 **Windows are absolutely positioned divs.** `Window.tsx` handles pointer-driven drag and eight-way resize, clamps bounds to the viewport, and animates open/close. Apps inside it don't know or care that they're in a window.
+
+**Two shells, one set of apps.** `Device.tsx` checks pointer coarseness, screen
+minor axis, and user agent once at mount, then mounts either shell. The iOS
+shell keeps its own tiny store (one open app, plus the open/close animation
+phase) because window bounds and z-order mean nothing on a phone, but dark
+mode, wallpaper, and `mobile` stay in the macOS store as the single source of
+truth — which is why reused apps need no changes. Apps that open other apps
+call `launchApp(id)` from `src/system/os-bridge.ts`, which routes to whichever
+shell registered itself.
 
 **Glass is CSS, not images.** Layered `backdrop-filter: blur() saturate()` with a translucent tint and inset highlight borders — defined once in `globals.css` and reused everywhere.
 

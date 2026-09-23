@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useOS, type AppId } from "@/system/store";
+import { launchApp } from "@/system/os-bridge";
+import { type AppId } from "@/system/store";
 import { profile, projects, experience, skills } from "@/data/resume";
 
 type Line = { text: string; color?: string };
@@ -38,7 +39,6 @@ export function TerminalApp() {
   const [histIdx, setHistIdx] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const openApp = useOS((s) => s.openApp);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
@@ -132,7 +132,7 @@ export function TerminalApp() {
         const valid: AppId[] = ["about", "projects", "experience", "terminal", "resume", "contact", "kubrick", "scripy", "b3vo", "campus", "echo", "snake", "settings"];
         const target = valid.find((v) => v === arg);
         if (target) {
-          openApp(target);
+          launchApp(target);
           print([{ text: `opening ${target}…`, color: "#3dfc85" }]);
         } else {
           print([{ text: `unknown app: ${arg}. try: ${valid.join(", ")}`, color: "#ff6b6b" }]);

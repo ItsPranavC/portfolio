@@ -35,7 +35,7 @@ export interface OSWindow extends WindowBounds {
   openCount: number;
 }
 
-export type WallpaperId = "tahoe" | "tahoe-night" | "sunset" | "graphite";
+export type WallpaperId = "tahoe" | "tahoe-night" | "sunset" | "graphite" | "liquid";
 
 interface OSState {
   booted: boolean;

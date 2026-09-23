@@ -23,6 +23,9 @@
   --window-chrome: rgb(240, 240, 245);
   --divider: rgba(0, 0, 0, 0.08);
   --menu-hover: rgba(10, 132, 255, 0.9);
+
+  /* iOS shell: system grouped background, behind status bar and content */
+  --ios-screen: #f2f2f7;
 }
 
 .dark {
@@ -38,6 +41,8 @@
   --content-bg: rgb(30, 30, 36);
   --window-chrome: rgb(44, 44, 52);
   --divider: rgba(255, 255, 255, 0.09);
+
+  --ios-screen: #000000;
 }
 
 @layer base {
@@ -122,6 +127,40 @@
 }
 .macos-scroll::-webkit-scrollbar-track {
   background: transparent;
+}
+
+/* ================================================================
+   iOS shell
+   ================================================================ */
+.ios-scroll {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+.ios-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* The home indicator is the only way out of an app, so it reacts to the
+   pointer instead of sitting there like decoration */
+.ios-home-indicator {
+  transition: transform 0.18s ease, opacity 0.18s ease;
+  transform-origin: center;
+}
+.ios-home-grab:hover .ios-home-indicator {
+  transform: scaleY(1.8) scaleX(1.04);
+}
+.ios-home-grab:active .ios-home-indicator {
+  transform: scaleY(2.2) scaleX(1.06);
+}
+
+/* Grouped-list rows highlight while pressed, like UITableViewCell */
+.ios-row {
+  transition: background-color 0.12s ease;
+}
+.ios-row:active {
+  background-color: rgba(120, 120, 128, 0.18);
 }
 
 /* ================================================================
@@ -230,6 +269,14 @@
 }
 .anim-dock-bounce {
   animation: dock-bounce 0.7s ease;
+}
+
+@keyframes ios-indicator-pulse {
+  0%, 100% { transform: translateY(0) scaleY(1); opacity: 0.8; }
+  50% { transform: translateY(-4px) scaleY(1.7); opacity: 1; }
+}
+.ios-home-indicator-pulse {
+  animation: ios-indicator-pulse 1.5s ease-in-out infinite;
 }
 
 @keyframes cursor-blink {

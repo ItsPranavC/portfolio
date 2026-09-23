@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useOS, type WallpaperId } from "@/system/store";
-import { WALLPAPERS, wallpaperPreview } from "./Wallpaper";
+import { useOS } from "@/system/store";
+import { WALLPAPERS, wallpaperChoices, wallpaperPreview } from "./Wallpaper";
 
 export function ControlCenter() {
   const open = useOS((s) => s.controlCenterOpen);
@@ -85,7 +85,7 @@ export function ControlCenter() {
           >
             <div className="mb-2 text-[13px] font-semibold">Wallpaper</div>
             <div className="flex gap-2">
-              {(Object.keys(WALLPAPERS) as WallpaperId[]).map((id) => (
+              {wallpaperChoices(false).map((id) => (
                 <button
                   key={id}
                   title={WALLPAPERS[id].name}

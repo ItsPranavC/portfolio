@@ -1,5 +1,5 @@
-import { MacOS } from "@/components/os/MacOS";
+import { Device } from "@/components/Device";
 
 export default function Home() {
-  return <MacOS />;
+  return <Device />;
 }

@@ -1,10 +1,11 @@
 "use client";
 
-import { useOS, type WallpaperId } from "@/system/store";
-import { WALLPAPERS, wallpaperPreview } from "@/components/os/Wallpaper";
+import { useOS } from "@/system/store";
+import { WALLPAPERS, wallpaperChoices, wallpaperPreview } from "@/components/os/Wallpaper";
 
 export function SettingsApp() {
   const dark = useOS((s) => s.dark);
+  const mobile = useOS((s) => s.mobile);
   const wallpaper = useOS((s) => s.wallpaper);
   const { setDark, setWallpaper } = useOS.getState();
 
@@ -43,7 +44,7 @@ export function SettingsApp() {
 
       <Section title="Wallpaper">
         <div className="grid grid-cols-2 gap-3">
-          {(Object.keys(WALLPAPERS) as WallpaperId[]).map((id) => (
+          {wallpaperChoices(mobile).map((id) => (
             <button
               key={id}
               className="rounded-xl p-2 text-left"

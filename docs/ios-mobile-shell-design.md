@@ -1,7 +1,7 @@
 # iOS 26 Mobile Shell — Design
 
 **Date:** 2026-08-17
-**Status:** Approved by Pranav (pending spec review)
+**Status:** Implemented 2026-09-23 (see "As built" at the bottom)
 
 ## Goal
 
@@ -154,3 +154,54 @@ Playwright (webapp-testing skill) against `next dev`:
    screen.
 5. Laptop viewport → macOS shell unchanged (menu bar + dock present).
 6. `next build` passes.
+
+---
+
+## As built (2026-09-23)
+
+Implemented as specified above, with these deliberate differences:
+
+- **Resume is restyled, not reused.** WebKit on iOS refuses to render a PDF in
+  an iframe, so `src/apps/ios/IOSResumeApp.tsx` hands the file to the system
+  viewer ("Open PDF" / Download) on iOS and keeps the inline preview on every
+  other engine. Reusing the macOS component would have shown an empty box on
+  the exact devices this shell targets.
+- **Dev override.** `?ios=1` forces the iOS shell and `?ios=0` forces macOS, so
+  the phone version can be reviewed from a desktop browser.
+- **Detection uses `useSyncExternalStore`** rather than `useState` +
+  `useEffect`: same "client-only value, black for one frame" behavior, without
+  a set-state-in-effect.
+- **B3VO / CAMPUS** run through `makeIOSEmbedApp()`
+  (`src/apps/ios/IOSEmbedApp.tsx`) instead of the macOS `makePhoneApp()`
+  iPhone costume — plain edge-to-edge iframes, since their web builds already
+  supply iPhone safe-area insets.
+- **`--ios-screen` token** in `globals.css` so `AppHost` paints the same
+  grouped background as the restyled apps; without it the status-bar and
+  home-indicator strips seamed against the app content.
+- **App corners animate 44 → 0** on open, so an open app is edge-to-edge
+  rather than keeping a visible rounded frame inside the browser viewport.
+- **Exiting an app got more affordance than a real iPhone gives it.** The
+  gesture is the one thing a visitor can't guess from looking, so the home
+  indicator: tracks the swipe live (the app shrinks toward its icon as you pull
+  up, and springs back if you release under a third of the way), accepts a
+  plain tap or click, thickens under the cursor, answers Enter/Space and Esc,
+  and for the first three app opens (counted in `localStorage`) a coach mark
+  reading "Swipe up or tap the bar to close" fades in above it while the
+  indicator pulses. The grab area is 220px wide rather than full width, so an
+  edge-to-edge app's own tab bar stays tappable either side of it.
+- **Home wallpaper** is `public/wallpapers/ios-liquid.jpg`, registered as the
+  `liquid` / "Liquid Glass" wallpaper and set as the iOS shell's default on
+  mount (Settings can still change it). It's marked `phoneOnly`, so
+  `wallpaperChoices()` keeps a phone-shaped image out of the desktop Settings
+  and Control Center pickers. A soft top-and-bottom scrim over the wallpaper
+  keeps the white icon labels legible on its pale areas.
+- **The home screen and dock go inert** (`pointer-events: none`,
+  `aria-hidden`) while an app is open — they stay mounted for the animation,
+  and opacity alone would leave their buttons tappable and in the a11y tree.
+
+Verified with Playwright against `next dev` (iPhone viewport + touch + UA):
+iOS shell renders; grid and dock apps open, push detail views, and exit via the
+home indicator; Terminal `open projects` and Contact's calendar button route
+through the bridge into the iOS shell; the Settings appearance toggle flips the
+whole shell to dark; a laptop viewport still gets the unchanged macOS desktop.
+`next build` passes.
