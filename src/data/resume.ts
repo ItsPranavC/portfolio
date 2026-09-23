@@ -1,7 +1,7 @@
 export const profile = {
   name: "Pranav Cavaturu",
   role: "Full-stack engineer, Founder, and Filmmaker",
-  email: "hi@cavaturu.com",
+  email: "pcavaturu00@gmail.com",
   linkedin: "https://linkedin.com/in/cavaturu",
   github: "https://github.com/ItsPranavC",
   education: {

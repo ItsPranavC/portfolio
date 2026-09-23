@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     },
     body: JSON.stringify({
       from: "Pranav's Portfolio <contact@cavaturu.com>",
-      to: [process.env.CONTACT_TO ?? "hi@cavaturu.com"],
+      to: [process.env.CONTACT_TO ?? "pcavaturu00@gmail.com"],
       reply_to: from,
       subject: `[Portfolio] ${subject}`,
       text: `From: ${from}\n\n${message}`,
